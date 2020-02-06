@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Admin - Gestión de categorias</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="mt-5 ml-5">
+		<h6>
+			< <a th:href="@{'/admin/'}">Menú Admin</a>
+		</h6>
+	</div>
+
+	<div>
+		<form action="#" th:action="@{/admin/tabla-categorias}" method="GET"
+			class="mx-auto col-8">
+			<input type="text" name="nombre" placeholder="Buscar por nombre..." />
+			<button class="btn- btn-danger" type="submit">Buscar</button>
+		</form>
+	</div>
+
+	<!-- Tabla de categorías -->
+	<div class="col-10 col-xl-8 mt-2 mx-auto">
+		<table
+			class="mx-auto table table-reponsive table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th>ID</th>
+					<th>Nombre</th>
+					<th>Editar</th>
+					<th>Borrar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="Categoria : ${listaCategorias}" class="text-center"
+					th:object="${Categoria}">
+					<td th:if=*{id!=0} th:text="*{id}">ID</td>
+					<td th:if=*{id!=0} th:text="*{nombre}" class="col"></td>
+					<td th:if=*{id!=0} class="col"><a class="img-fluid" href="#"
+						th:href="@{/admin/editar-categoria/{id}(id=${Categoria.id})}">
+							<img class="col" src="../static/img/editar.png"
+							th:src="@{/img/editar.png}">
+					</a></td>
+					<td th:if=*{id!=0} class="col"><a class="img-fluid" href="#"
+						th:href="@{/admin/borrar-categoria/{id}(id=${Categoria.id})}">
+							<img class="col" src="../static/img/borrar.png"
+							th:src="@{/img/borrar.png}"
+							onclick="return confirm('¿Está seguro querer borrar este Categoria?')">
+					</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Paginación -->
+	<div class="row mt-5 mx-auto text-center justify-content-center">
+		<div class="form-group col-md-1  mx-auto">
+			<select class="form-control pagination" id="pageSizeSelect">
+				<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+					th:value="${pageSize}"
+					th:selected="${pageSize} == ${selectedPageSize}"></option>
+			</select>
+		</div>
+		<div th:if="${listaCategorias.totalPages != 1}"
+			class="form-group col-md-11 pagination-centered">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-end">
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaCategorias.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la primera página, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-categorias/(pageSize=${selectedPageSize}, page=1, nombre=${param.nombre})}">&laquo;</a>
+					</li>
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaCategorias.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la página anterior, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-categorias/(pageSize=${selectedPageSize}, page=${listaCategorias.number}, nombre=${param.nombre})}">&larr;</a>
+					</li>
+					<!-- Este bucle genera los enlaces para las demás páginas -->
+					<li class="page-item"
+						th:class="${listaCategorias.number == (page - 1)} ? 'active pointer-disabled'"
+						th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-categorias/(pageSize=${selectedPageSize}, page=${page}, nombre=${param.nombre})}"
+						th:text="${page}"></a>
+					</li>
+					<!-- Enlace a la siguiente página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:classappend="${listaCategorias.number + 1 == listaCategorias.totalPages} ? 'disabled'">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-categorias/(pageSize=${selectedPageSize}, page=${listaCategorias.number + 2}, nombre=${param.nombre})}">&rarr;</a>
+					</li>
+					<!-- Enlace a la última página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:class="${listaCategorias.number + 1 == listaCategorias.totalPages} ? disabled">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-categorias/(pageSize=${selectedPageSize}, page=${listaCategorias.totalPages}, nombre=${param.nombre})}">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+
+	<!-- Nueva categoría -->
+	<div class="col-12 mx-auto row mb-5 mt-2 justify-content-center">
+		<div class="col-6 text-center">
+			<button type="button"
+				class="btn btn-primary mx-auto col-6 col-xl-2 my-5"
+				data-toggle="modal" data-target="#newCategoria">Nueva
+				categoría</button>
+			<div class="modal" id="newCategoria">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<div class="modal-header">
+							<h4 class="modal-title">Crear nueva categoría</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<form method="POST" th:action="@{/admin/addcategoria}"
+							enctype="multipart/form-data">
+							<div class="form-label-group mb-3 col-12">
+								<label for="nombre">Nombre</label> <input type="text"
+									class="form-control" th:field="${categoria.nombre}" required>
+							</div>
+							<div class="mx-auto col-6 col-xl-2 my-5">
+								<input type="submit" name="enviar" value="Añadir categoría"
+									class="bg-danger border-0 btn btn-danger mx-auto">
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/categorias.js}"></script>
+</body>
+</html>

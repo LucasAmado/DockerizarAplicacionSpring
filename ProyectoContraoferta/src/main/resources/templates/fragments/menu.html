@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Menú de navegación</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<body>
+
+	<!-- Nav común entre admin y cliente. Gracias a poner  sec:authorize="hasRole('ROLE_ADMIN/CLIENTE') puedo hacer que solo se muestre esa opción si tienes permitido el acceso a ella.-->
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark"
+		th:fragment="menu">
+		<button class="navbar-toggler d-lg-none" type="button"
+			data-toggle="collapse" data-target="#nav" aria-controls="nav"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="img-fluid col-5 col-md-4 col-xl-1 col-lg-2">
+			<a class="navbar-brand" th:href="@{/inicio}"><img class="col-12"
+				src="../static/img/logotipo.png" th:src="@{/img/logotipo.png}"></a>
+		</div>
+		<div class="collapse navbar-collapse" id="nav">
+			<ul class="navbar-nav col-6 col-md-8 col-xl-9 col-lg-9 mx-auto">
+				<li class="ml-auto my-auto">
+					<form action="#" th:action="@{/productos-buscados}" method="GET">
+						<input type="text" name="nombre"
+							placeholder="Buscar por nombre..." />
+						<button class="btn- btn-danger" type="submit">Buscar</button>
+					</form>
+				</li>
+				<li sec:authorize="hasRole('ROLE_CLIENTE')" class="ml-auto"><a
+					class="nav-link" th:href="@{/cliente/contacto}">Contacto</a></li>
+				<li class="ml-auto" sec:authorize="hasRole('ROLE_CLIENTE')"><a
+					class="nav-link" th:href="@{/cliente/informacion}">Informacion</a></li>
+				<li class="ml-auto" sec:authorize="hasRole('ROLE_CLIENTE')"><a
+					class="nav-link" th:href="@{/cliente/carrito}">Carrito</a></li>
+				<li class="nav-item dropdown ml-auto"><a
+					class="nav-link dropdown-toggle waves-effect waves-light"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><span
+						th:text="${logeado.nombre}"></span></a>
+					<div class="dropdown-menu dropdown-menu-right dropdown-ins"
+						aria-labelledby="navbarDropdown">
+						<!-- Cliente -->
+						<span sec:authorize="hasRole('ROLE_CLIENTE')"><a
+							class="dropdown-item" th:href="@{/historial-compras}">Historial
+								de compras</a>
+							<div class="dropdown-divider"></div></span>
+						<!-- Admin -->
+						<span sec:authorize="hasRole('ROLE_ADMIN')"> <a
+							class="dropdown-item" th:href="@{/admin/menu-gestion}">Menú
+								gestión</a>
+							<div class="dropdown-divider"></div></span>
+						<!-- General -->
+						<a class="dropdown-item" th:href="@{/editar-perfil}">Editar
+							perfil</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item"
+							href="javascript:document.getElementById('logoutForm').submit()">Cerrar
+							sesión</a>
+						<form th:action="@{/logout}" method="POST" id="logoutForm"></form>
+					</div></li>
+		</div>
+	</nav>
+</body>
+</html>
+</body>
+</html>

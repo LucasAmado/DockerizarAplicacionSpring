@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Categoría de productos</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="col-11 mx-auto my-5">
+		<h2 class="text-center text-uppercase mt-3">QUIÉNES SOMOS</h2>
+		<p class="mb-5 text-justify">
+			<Strong>Contraoferta</Strong> es una empresa que pese a ser
+			relativamente nueva ya conocida a nivel nacional por sus grandes
+			ofertas y descuentos. Eso mismo es lo que nos dice el eslogan "No
+			somos únicamente una empresa. Somos tu amigo de confianza, ese que te
+			ayuda a llegar a fin de mes."
+		</p>
+
+		<h2 class="text-center text-uppercase mt-3">CÓMO SURGIÓ LA IDEA</h2>
+		<p class="text-justify">La empresa a pesar de haber salido al
+			mercado hace poco en realidad lleva detrás de sí más de un año de
+			produccón.</p>
+		<p class="mb-5 text-justify">Curiosamente la idea llevaba varios
+			años en la idea de su fundador y actual dueño: Lucas Amado. Sin
+			embargo no fue hasta que empezó a buscar financiación y ver todo el
+			apoyo que recicbió cuando realemnte se tomó el proyecto en serio.</p>
+
+		<h2 class="text-center text-uppercase mt-3">Lo que nos diferencia
+			de la competencia</h2>
+		<p class="text-justify">Es verdad que en un principio la idea no
+			era en sí la más innovadora del mundo, pero no por eso somos igual al
+			resto. Si hay algo que nos hace destacar por encima es la atención
+			que reciben nuestros clientes.</p>
+		<p class="text-justify">En contraoferta nos comprometemos en
+			atenderle lo más rápido que nos sea posible y con la mejor calidad
+			posible. Se acabaron las largas esperas al teléfono o los mensajes
+			sin responder.</p>
+		<p class="text-justify mb-5 ">
+			Puede ponerse en contacto con nosotros enviando un mensaje a <span>contraoferta@gmail.com</span>.
+			O Si lo prefiere también puede llamarnos al <span>954922671</span>
+		</p>
+	</div>
+
+	<!-- FOOTER -->
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

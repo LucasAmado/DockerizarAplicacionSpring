@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Contraoferta - tramitar compra</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<p class="mt-5 ml-5"
+		th:text="${#temporals.format(compra.fechaCompra, 'dd/MM/yyyy')}"></p>
+
+	<div class="col-11 col-xl-7 col-md-7 col-lg-7 mx-auto my-2">
+		<img class="col-12" src="/img/gracias.png">
+	</div>
+
+	<div class="col-11 mx-auto text-center">
+		<h4>
+			El precio total de la compra es de <span
+				th:text="${#numbers.formatDecimal(compra.totalCompra,0,'COMMA',2,'POINT')} + '€'"></span>
+		</h4>
+		<p>
+			El id de su compra es <span th:text="${compra.id}">. Podrá
+				usar este dato en caso de que necesite hacer alguna reclamación.</span>
+		</p>
+		<p>Recuerde que en la sección 'Historial de compras' del menú
+			podrá encontrar las facturas de todas sus compras.</p>
+		<p>
+			En cuanto podamos nos pondremos en contacto con usted <span
+				th:text="${compra.usuario.nombre} + ' '+ ${compra.usuario.apellidos}"></span>
+		</p>
+	</div>
+
+	<!-- FOOTER -->
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

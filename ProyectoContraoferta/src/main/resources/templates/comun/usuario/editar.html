@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title sec:authorize="hasRole('ROLE_CLIENTE')">Editar mi perfil</title>
+<title sec:authorize="hasRole('ROLE_ADMIN')">Admin - Editar
+	usuario</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/formularios.css"
+	th:href="@{/css/formularios.css}">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="container col-12 my-5">
+		<div>
+			<div class="col-lg-10 col-xl-5 mx-auto">
+				<div class="card card-signin no-border">
+					<form method="POST" th:object="${user}"
+						th:action="@{/edicion-usuario/}">
+						<div class="text-center mt-3">
+							<img src="../static/img/logotipo.png"
+								th:src="@{/img/logotipo.png}">
+						</div>
+						<h5 class="card-title text-center"
+							sec:authorize="hasRole('ROLE_CLIENTE')">Editar mi perfil</h5>
+						<h5 class="card-title text-center"
+							sec:authorize="hasRole('ROLE_ADMIN')">Editar usuario</h5>
+						<div class="col-12 mx-auto my-5 mt-2 justify-content-center">
+							<div class="col-4 text-center">
+								<a th:href="@{/darme-baja/{id}(id=${user.id})}"
+									class="btn btn-danger" type="button"
+									onclick="return confirm('Una vez acepte se borrarán todos sus datos')">Darme
+									de baja</a>
+							</div>
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<input th:if="${user.id != 0}" type="hidden" name="id"
+								th:field="*{id}"> <label for="name">Nombre <span>*</span></label>
+							<input type="text" name="name" class="form-control"
+								placeholder="Escriba su nombre" maxlength="80" required
+								autofocus th:field="*{nombre}">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="apellidos">Apellidos <span>*</span></label> <input
+								type="text" name="apellidos" class="form-control" maxlength="80"
+								required placeholder="Escriba sus apellidos"
+								th:field="*{apellidos}">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="correo">Email <span>*</span></label> <span
+								class="col text-center" id='result'></span><input type="email"
+								name="correo" class="form-control"
+								placeholder="ejemplo@gmail.com" maxlength="80" required
+								th:field="*{email}">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="contrasena">Contraseña <span>*</span></label> <input
+								type="password" name="contrasena" class="form-control"
+								placeholder="********" maxlength="20" required
+								th:field="*{password}">
+						</div>
+						<!-- Sólo visible para el admin -->
+						<div sec:authorize="hasRole('ROLE_ADMIN')"
+							class="form-label-group col-11 mx-auto mb-3">
+							<label for="admin">Role <span>*</span></label><br /> <input
+								type="radio" name="admin" value="true" /> <label>Admin</label><br />
+							<input type="radio" name="admin" value="false" /> <label>Cliente</label>
+						</div>
+						<div class="col-3 col-xl-2 mx-auto my-5">
+							<input type="submit" name="editar" id='validate'
+								value="Guardar cambios" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/formularios.js}"></script>
+	<script type="text/javascript">
+		function validateEmail(email) {
+			var re = 
+			return re.test(email);
+		}
+
+		function validate() {
+			var $result = $("#result");
+			var email = $("#email").val();
+			$result.text("");
+
+			if (!validateEmail(email)) {
+				$result.text("El email no es válido");
+				return false;
+			}
+		}
+
+		$("#validate").on("click", validate);
+	</script>
+</body>
+</html>

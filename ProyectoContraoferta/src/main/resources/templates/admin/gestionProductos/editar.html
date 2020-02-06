@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Admin - Editar producto</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<!-- Editar -->
+	<div class="bg-white">
+		<div class="col-12">
+			<div class="col-12 col-lg-10 col-xl-7 mx-auto">
+				<div class="card card-signin my-5 no-border row">
+					<form method="POST" th:object="${producto}"
+						th:action="@{/admin/edicion-producto}"
+						enctype="multipart/form-data">
+						<h5 class="text-center mt-4">Edición del producto</h5>
+						<input th:if="*{id != 0}" type="hidden" name="id" th:field="*{id}">
+						<div class="col-xl-7 col-lg-8 col-12 mx-auto">
+							<div class="my-3">
+								<img class="img-fluid col-12" id="img-old" name="img-old"
+									th:src="@{/images/} + *{fileUrl}"></img>
+							</div>
+						</div>
+						<!-- Campos requeridos del producto -->
+						<div th:insert="fragments/camposProductos.html :: campos"></div>
+						<div class="col-12 row justify-content-center">
+							<div
+								class="form-label-group mb-3 col-md-3 col-lg-3 col-xl-3 col-6">
+								<label class="col-12" for="date">Caducidad</label> <input
+									type="date" id="caducidad" name="caducidad"
+									class="form-control" required th:field="*{fechaCaducidad}">
+							</div>
+							<div
+								class="form-label-group mb-3 col-md-3 col-lg-3 col-xl-3 col-6">
+								<label for="img-new">Imagen del producto</label> <input
+									type="file" id="file" name="file" class="mx-auto">
+							</div>
+						</div>
+						<div class="col-12 justify-content-center mt-2">
+							<p id="mensajeImg" class="text-center"></p>
+						</div>
+						<div class="col-6 col-xl-2 col-lg-2 mx-auto mt-2 mb-4">
+							<input type="submit" name="enviar" value="Guardar cambios" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/formularios.js}"></script>
+</body>
+</html>

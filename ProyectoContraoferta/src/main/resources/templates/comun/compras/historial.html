@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>Historial de compra</title>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="mt-5 ml-5" sec:authorize="hasRole('ROLE_ADMIN')">
+		<h6>
+			< <a th:href="@{'/admin/'}">Menú Admin</a>
+		</h6>
+	</div>
+
+	<h2 class="text-uppercase text-center my-5">Historial de compra</h2>
+
+	<div th:if="${listaCompras.totalPages == 0}">
+		<h4 class="text-center" sec:authorize="hasRole('ROLE_ADMIN')">Ningún
+			cliente ha realizado una compra</h4>
+		<h4 class="text-center" sec:authorize="hasRole('ROLE_CLIENTE')">No
+			ha realizado ninguna compra</h4>
+		<p class="text-center mt-4">Cuando lo haga podrá ver aquí todos
+			los detalles</p>
+	</div>
+
+
+	<!-- Tabla de compras -->
+	<div class="col-11 mt-5 mx-auto" th:if="${listaCompras.totalPages > 0}">
+		<table
+			class="mx-auto table table-reponsive table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th>ID compra</th>
+					<th sec:authorize="hasRole('ROLE_ADMIN')">Nombre cliente</th>
+					<th class="col">Fecha compra</th>
+					<th class="col">Precio total (€)</th>
+					<th>Ver detalles</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="compra : ${listaCompras}" class="text-center"
+					th:object="${compra}">
+					<td th:text="*{id}">ID</td>
+					<td sec:authorize="hasRole('ROLE_ADMIN')"
+						th:text="*{nombreComprador}+' '+*{apellidosComprador}"></td>
+					<td th:text="*{#temporals.format(fechaCompra, 'dd/MM/yyyy')}"></td>
+					<td
+						th:text="${#numbers.formatDecimal(compra.totalCompra,0,'COMMA',2,'POINT')} + '€'"></td>
+					<td class="col"><a class="img-fluid" href="#"
+						th:href="@{/detalles-compra/{id}(id=${compra.id})}"> <img
+							class="col" src="../static/img/ver.png" th:src="@{/img/ver.png}">
+					</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+
+	<!-- Paginación -->
+	<div class="row mt-5 mx-auto text-center justify-content-center">
+		<div class="form-group col-md-1  mx-auto">
+			<select class="form-control pagination" id="pageSizeSelect">
+				<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+					th:value="${pageSize}"
+					th:selected="${pageSize} == ${selectedPageSize}"></option>
+			</select>
+		</div>
+		<div th:if="${listaCompras.totalPages != 1}"
+			class="form-group col-md-11 pagination-centered">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-end">
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaCompras.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la primera página, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/historial-compras/(pageSize=${selectedPageSize}, page=1, nombre=${param.nombre})}">&laquo;</a>
+					</li>
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaCompras.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la página anterior, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/historial-compras/(pageSize=${selectedPageSize}, page=${listaCompras.number}, nombre=${param.nombre})}">&larr;</a>
+					</li>
+					<!-- Este bucle genera los enlaces para las demás páginas -->
+					<li class="page-item"
+						th:class="${listaCompras.number == (page - 1)} ? 'active pointer-disabled'"
+						th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+						<a class="page-link text-danger"
+						th:href="@{/historial-compras/(pageSize=${selectedPageSize}, page=${page}, nombre=${param.nombre})}"
+						th:text="${page}"></a>
+					</li>
+					<!-- Enlace a la siguiente página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:classappend="${listaCompras.number + 1 == listaCompras.totalPages} ? 'disabled'">
+						<a class="page-link text-danger"
+						th:href="@{/historial-compras/(pageSize=${selectedPageSize}, page=${listaCompras.number + 2}, nombre=${param.nombre})}">&rarr;</a>
+					</li>
+					<!-- Enlace a la última página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:class="${listaCompras.number + 1 == listaCompras.totalPages} ? disabled">
+						<a class="page-link text-danger"
+						th:href="@{/historial-compras/(pageSize=${selectedPageSize}, page=${listaCompras.totalPages}, nombre=${param.nombre})}">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+
+	<!-- FOOTER -->
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/compras.js}"></script>
+</body>
+</html>

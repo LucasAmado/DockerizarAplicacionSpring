@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Admin - Tabla de la parte de gestión de productos</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/footer.css">
+</head>
+<body>
+	<!-- Tabla de productos -->
+	<div class="col-10 col-xl-8 mt-2 mx-auto" th:fragment="tablaProd" th:if="${listaProductos.totalPages > 0}">
+		<table
+			class="mx-auto table table-reponsive table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th>ID</th>
+					<th>Nombre</th>
+					<th>Categoria</th>
+					<th>Caducado</th>
+					<th>Precio (€)</th>
+					<th class="col">Precio Original (€)</th>
+					<th>Cupón de descuento</th>
+					<th>Fecha de caducidad</th>
+					<th>Editar</th>
+					<th>Borrar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="Producto : ${listaProductos}" class="text-center"
+					th:object="${Producto}">
+					<td th:text="*{id}">ID</td>
+					<td th:text="*{nombre}" class="text-lowercase col"></td>
+					<td th:if="*{categoria !=null}"
+						th:text="*{categoria.nombre}"></td>
+					<td th:text="*{caducado}">
+					</td><td
+						th:text="*{#numbers.formatDecimal(precioU,0,'COMMA',2,'POINT')}"></td>
+					<td 
+						th:text="*{#numbers.formatDecimal(precioOriginal,0,'COMMA',2,'POINT')}"></td>
+					<td class="col" th:text="*{cupon.nombre}"></td>
+					<td class="col"
+						th:text="*{#temporals.format(fechaCaducidad, 'dd/MM/yyyy')}"></td>
+					<td class="col"><a class="img-fluid" href="#"
+						th:href="@{/admin/editar-producto/{id}(id=${Producto.id})}"> <img
+							class="col" src="../static/img/editar.png"
+							th:src="@{/img/editar.png}">
+					</a></td>
+					<td class="col"><a class="img-fluid" href="#"
+						th:href="@{/admin/borrar-producto/{id}(id=${Producto.id})}"> <img
+							class="col" src="../static/img/borrar.png"
+							th:src="@{/img/borrar.png}"
+							onclick="return confirm('¿Está seguro querer borrar este producto?')">
+					</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

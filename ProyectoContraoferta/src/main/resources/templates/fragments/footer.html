@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>Footer</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<body>
+	<footer class="pt-3 pb-3 mt-5 col-12" th:fragment="pie">
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-4 col-xl-4 float-lg-right float-xl-right">
+					<ul class="contact list-unstyled">
+						<h5 class="my-0 text-center">Atención al cliente</h5>
+						<hr class="mt-0" />
+						<li>Horario
+							<ul>
+								<li>Lunes - Viernes: 8:00 - 20:30</li>
+								<li>Sábados - Domingos: 9:00 - 18:00</li>
+							</ul>
+						</li>
+						<li>Teléfono: 954922671</li>
+					</ul>
+				</div>
+				<div class="col-12 col-lg-4 col-xl-4 float-lg-lrft float-xl-left">
+					<ul class="contact list-unstyled">
+						<h5 class="my-0 text-center">Más información</h5>
+						<hr class="mt-0" />
+						<li class="mb-2 text-center"><a href="#">Centro de
+								Privacidad</a></li>
+						<li class="mb-2 text-center"><a href="#">Condiciones
+								generales</a></li>
+						<li class="mb-2 text-center"><a href="#">Trabaja con
+								nosotros</a></li>
+					</ul>
+				</div>
+				<div class="col-12 col-lg-4 col-xl-4">
+					<ul class="contact list-unstyled">
+						<h5 class="my-0 text-center">Redes sociales</h5>
+						<hr class="mt-0" />
+						<li class="text-center"><img class="col-8"
+							src="../static/img/social.png" th:src="@{/img/social.png}"></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>

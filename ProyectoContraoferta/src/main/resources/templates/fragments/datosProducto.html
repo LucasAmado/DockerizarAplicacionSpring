@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<title>Datos que se ven en las fichas de los productos</title>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+</head>
+<body>
+	<div class="row col mt-3 justify-content-center mx-auto"
+		th:fragment="datos">
+		<div
+			class="col col-xl-4 col-lg-6 border row mx-auto justify-content-center"
+			th:each="producto : ${listaProductos}">
+			<div class="my-5">
+				<h3 class="col-12 text-center mb-2" th:text="${producto.nombre}"></h3>
+			</div>
+			<div class="mb-3">
+				<img class="col-12 inferior"
+					th:src="@{/images/}+ ${producto.fileUrl}"></img>
+			</div>
+			<div class="my-2 col-8 img-fluid">
+				<img th:if="${producto.cupon.id != 1}" class="col-12"
+					src="/img/oferta.png">
+			</div>
+			<div class="col-6">
+				<h6 class="text-center">Precio original</h6>
+				<del>
+					<h4 class="text-center"
+						th:text="${#numbers.formatDecimal(producto.precioOriginal,0,'COMMA',2,'POINT')} + '€'"></h4>
+				</del>
+			</div>
+			<div class="col-6">
+				<h6 class="text-center">Precio final</h6>
+				<h4 class="text-center"
+					th:text="${#numbers.formatDecimal(producto.precioU,0,'COMMA',2,'POINT')} + '€'"></h4>
+			</div>
+			<div class="col">
+				<h6 class="text-center">Categoría:</h6>
+				<p class="text-center" th:text="${producto.categoria.nombre}">
+			</div>
+			<div class="col-12 row mx-auto">
+				<div class="col-6 mt-3 mb-5 text-center">
+					<a th:href="@{/datos-producto/{id}(id=${producto.id})}"
+						class="btn btn-success" type="buttom">Ver detalles</a>
+				</div>
+				<div class="col-6 mt-3 mb-5 text-center"
+					sec:authorize="hasRole('ROLE_CLIENTE')">
+					<a class="btn btn-danger"
+						th:href="@{/cliente/anadir-carrito/{id}(id=${producto.id})}"
+						role="button">Añadir al carrito</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+</body>
+</html>

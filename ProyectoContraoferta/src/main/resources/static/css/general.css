@@ -1,0 +1,72 @@
+a, a:hover {
+	text-decoration: none;
+}
+
+.btn-dark{
+	color: white;
+}
+
+footer {
+	font-family: sans-serif;
+	border-top: #494D58 2px solid;
+	background-color: white;
+}
+
+footer, footer a, footer a:hover {
+	color: #494D58;
+}
+
+hr {
+	border: #494D58 1px solid;
+}
+
+h5 {
+	display: block;
+	letter-spacing: 3px;
+}
+
+th, .categorias {
+	color: white;
+}
+
+li.dropdown ul a:hover {
+	color: blue;
+}
+
+del {
+	color: #999;
+}
+
+.text-uppercase.text-center.mb-5.mt-2, h2 {
+	font-family: 'Franklin Gothic Heavy', sans-serif;
+}
+
+h3 {
+	font-family: 'candara', 'Sylfaen', sans-serif;
+	font-weight: bold;
+}
+
+.zoom {
+	overflow: hidden;
+}
+
+.zoom img {
+	transition: transform .5s ease;
+}
+
+.zoom:hover img {
+	transform: scale(1.2);
+}
+
+.text-muted {
+	font-family: 'MV Boli', sans-serif;
+}
+
+.superior{
+	position: absolute;
+	z-index: 2;
+}
+
+.inferior{
+	z-index: -1;
+}

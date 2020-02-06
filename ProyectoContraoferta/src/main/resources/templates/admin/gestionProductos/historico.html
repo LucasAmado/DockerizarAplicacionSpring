@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Admin - Histórico de productos</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="mt-5 ml-5">
+		<h6>
+			< <a th:href="@{'/admin/'}">Menú Admin</a>
+		</h6>
+	</div>
+
+	<h2 class="text-center my-5" th:if="${listaProductos.totalPages == 0}">Actualmente
+		no hay productos borrados</h2>
+
+	<div th:if="${listaProductos.totalPages > 0}">
+		<form action="#" th:action="@{/admin/tabla-productos/historico}"
+			method="GET" class="mx-auto col-8">
+			<input type="text" name="nombre" placeholder="Buscar por nombre..." />
+			<button class="btn- btn-danger" type="submit">Buscar</button>
+		</form>
+	</div>
+	<div class="col-10 col-xl-8 mt-2 mx-auto"
+		th:if="${listaProductos.totalPages > 0}">
+		<table
+			class="mx-auto table table-reponsive table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr class="text-center">
+					<th>ID</th>
+					<th>Nombre</th>
+					<th>Categoria</th>
+					<th>Precio (€)</th>
+					<th class="col">Precio Original (€)</th>
+					<th>Fecha de caducidad</th>
+					<th>Habilitar</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="Producto : ${listaProductos}" class="text-center"
+					th:object="${Producto}">
+					<td th:text="*{id}">ID</td>
+					<td th:text="*{nombre}" class="text-lowercase col"></td>
+					<td th:text="*{categoria.nombre}"></td>
+					<td
+						th:text="*{#numbers.formatDecimal(precioU,0,'COMMA',2,'POINT')}"></td>
+					<td class="col"
+						th:text="*{#numbers.formatDecimal(precioOriginal,0,'COMMA',2,'POINT')}"></td>
+					<td class="col"
+						th:text="*{#temporals.format(fechaCaducidad, 'dd/MM/yyyy')}"></td>
+					<td class="col"><a class="img-fluid" href="#"
+						th:href="@{/admin/activar-producto/{id}(id=${Producto.id})}">
+							<img class="col" src="../static/img/validar.gif"
+							th:src="@{/img/validar.gif}"
+							onclick="return confirm('¿Está seguro querer activarlo?')">
+					</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- Paginación -->
+	<div class="row mt-5 mx-auto text-center justify-content-center">
+		<div class="form-group col-md-1  mx-auto">
+			<select class="form-control pagination" id="pageSizeSelect">
+				<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+					th:value="${pageSize}"
+					th:selected="${pageSize} == ${selectedPageSize}"></option>
+			</select>
+		</div>
+		<div th:if="${listaProductos.totalPages != 1}"
+			class="form-group col-md-11 pagination-centered">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-end">
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaProductos.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la primera página, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/(pageSize=${selectedPageSize}, page=1, nombre=${param.nombre})}">&laquo;</a>
+					</li>
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaProductos.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la página anterior, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/(pageSize=${selectedPageSize}, page=${listaProductos.number}, nombre=${param.nombre})}">&larr;</a>
+					</li>
+					<!-- Este bucle genera los enlaces para las demás páginas -->
+					<li class="page-item"
+						th:class="${listaProductos.number == (page - 1)} ? 'active pointer-disabled'"
+						th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/(pageSize=${selectedPageSize}, page=${page}, nombre=${param.nombre})}"
+						th:text="${page}"></a>
+					</li>
+					<!-- Enlace a la siguiente página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:classappend="${listaProductos.number + 1 == listaProductos.totalPages} ? 'disabled'">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/(pageSize=${selectedPageSize}, page=${listaProductos.number + 2}, nombre=${param.nombre})}">&rarr;</a>
+					</li>
+					<!-- Enlace a la última página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:class="${listaProductos.number + 1 == listaProductos.totalPages} ? disabled">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/(pageSize=${selectedPageSize}, page=${listaProductos.totalPages}, nombre=${param.nombre})}">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/productos/historico.js}"></script>
+</body>
+</html>

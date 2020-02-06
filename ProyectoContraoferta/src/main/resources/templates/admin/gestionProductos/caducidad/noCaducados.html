@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Admin - Gestión de productos sin caducar</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+	integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/general.css"
+	th:href="@{/css/general.css}">
+</head>
+<body>
+	<div th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="mt-5 ml-5">
+		<h6>
+			< <a th:href="@{'/admin/'}">Menú Admin</a>
+		</h6>
+	</div>
+
+
+	<div th:if="${listaProductos.totalPages > 0}">
+		<div class="mx-auto col-4 col-md-2 col-xl-1 col-lg-2">
+			<div class="container-fluid btn btn-primary">
+				<ul class="nav nav-tabs">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" aria-expanded="false">Filtrar <span
+							class="caret"></span></a>
+						<ul class="dropdown-menu" x-placement="bottom-start">
+							<a href="/admin/tabla-productos/" class="text-center"><li>Todos</li></a>
+							<a href="/admin/tabla-productos/caducados/" class="text-center"><li>
+									caducados</li></a>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+		<form action="#" th:action="@{/admin/tabla-productos/no-caducados}"
+			method="GET" class="mx-auto col-8">
+			<input type="text" name="nombre" placeholder="Buscar por nombre..." />
+			<button class="btn- btn-danger" type="submit">Buscar</button>
+		</form>
+	</div>
+
+
+	<div class="my-5" th:if="${listaProductos.totalPages == 0}">
+		<h4 class="text-center">No hay ningún producto caducado en estos
+			momentos</h4>
+	</div>
+
+	<div th:insert="fragments/tablaProd.html :: tablaProd"></div>
+
+	<!-- Paginación -->
+	<div class="row mt-5 mx-auto text-center justify-content-center">
+		<div class="form-group col-md-1  mx-auto">
+			<select class="form-control pagination" id="pageSizeSelect">
+				<option th:each="pageSize : ${pageSizes}" th:text="${pageSize}"
+					th:value="${pageSize}"
+					th:selected="${pageSize} == ${selectedPageSize}"></option>
+			</select>
+		</div>
+		<div th:if="${listaProductos.totalPages != 1}"
+			class="form-group col-md-11 pagination-centered">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-end">
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaProductos.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la primera página, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/no-caducados/(pageSize=${selectedPageSize}, page=1, nombre=${param.nombre})}">&laquo;</a>
+					</li>
+					<!-- Si el número de página es cero, deshabilitamos el enlace -->
+					<li class="page-item"
+						th:class="${listaProductos.number == 0} ? disabled">
+						<!-- Este enlace nos debe llevar a la página anterior, con el tamaño de página actual -->
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/no-caducados/(pageSize=${selectedPageSize}, page=${listaProductos.number}, nombre=${param.nombre})}">&larr;</a>
+					</li>
+					<!-- Este bucle genera los enlaces para las demás páginas -->
+					<li class="page-item"
+						th:class="${listaProductos.number == (page - 1)} ? 'active pointer-disabled'"
+						th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/no-caducados/(pageSize=${selectedPageSize}, page=${page}, nombre=${param.nombre})}"
+						th:text="${page}"></a>
+					</li>
+					<!-- Enlace a la siguiente página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:classappend="${listaProductos.number + 1 == listaProductos.totalPages} ? 'disabled'">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/no-caducados/(pageSize=${selectedPageSize}, page=${listaProductos.number + 2}, nombre=${param.nombre})}">&rarr;</a>
+					</li>
+					<!-- Enlace a la última página; si estamos en la última queda desabilitado  -->
+					<li class="page-item"
+						th:class="${listaProductos.number + 1 == listaProductos.totalPages} ? disabled">
+						<a class="page-link text-danger"
+						th:href="@{/admin/tabla-productos/no-caducados/(pageSize=${selectedPageSize}, page=${listaProductos.totalPages}, nombre=${param.nombre})}">&raquo;</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+
+
+	<form method="GET" action="/admin/new-producto"
+		class="mx-auto col-6 col-md-3 col-xl-2 mt-3 mb-5">
+		<input type="submit" value="Añadir producto">
+	</form>
+
+	<div th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/productos/noCaducados.js}"></script>
+</body>
+</html>

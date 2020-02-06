@@ -1,0 +1,16 @@
+body {
+	background-image: url("../img/mural.png");
+	background-attachment: fixed;
+}
+
+.g-recaptcha {
+	display: inline-block;
+}
+
+form span {
+	color: red;
+}
+
+a, a:hover {
+	text-decoration: none;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title sec:authorize="!isAuthenticated()">Regístrate</title>
+	<title sec:authorize="hasRole('ROLE_ADMIN')">Admin - Nuevo
+		usuario</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/formularios.css" th:href="@{/css/formularios.css}">
+	<link rel="stylesheet" href="/css/general.css" th:href="@{/css/general.css}">
+	<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<body>
+	<div sec:authorize="hasRole('ROLE_ADMIN')" th:insert="fragments/menu.html :: menu"></div>
+
+	<div class="container col-12 my-5">
+		<div>
+			<div class="col-lg-10 col-xl-5 mx-auto">
+				<div class="card card-signin no-border">
+					<form method="POST" th:object="${user}" th:action="@{/addUsuario}" name="formulario">
+						<div class="text-center mt-3">
+							<img src="../static/img/logotipo.png" th:src="@{/img/logotipo.png}">
+						</div>
+						<h5 class="card-title text-center" sec:authorize="!isAuthenticated()">Regístrese y disfrute de
+							las ventajas</h5>
+						<h5 class="card-title text-center" sec:authorize="hasRole('ROLE_ADMIN')">Nuevo usuario</h5>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="nombre">Nombre <span>*</span></label> <span class="col text-center"
+								id="mensajeNombre"></span><input type="text" name="name" id="name" class="form-control"
+								placeholder="Escriba su nombre" maxlength="200" required th:field="*{nombre}"
+								onblur="comprobarName()">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="apellidos">Apellidos <span>*</span></label> <span class="col text-center"
+								id="mensajeApellidos"></span><input type="text" name="lastName" id="lastName"
+								class="form-control" placeholder="Escriba sus apellidos" maxlength="200" required
+								th:field="*{apellidos}" onblur="comprobarLastName()">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="correo">Email <span>*</span></label> <span class="col text-center"
+								id="mensajeEmail"></span><input type="email" name="email" id="email"
+								class="form-control email" placeholder="ejemplo@gmail.com" maxlength="80" required
+								th:field="*{email}" onblur="comprobarEmail()">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="correo">Repetir email <span>*</span></label> <span
+								class="col text-center"></span><input type="email" name="emailRep" id="emailRep"
+								class="form-control email" placeholder="ejemplo@gmail.com" maxlength="80" required
+								onblur="comprobarEmail()">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="contrasena">Contraseña <span>*</span></label> <span class="col text-center"
+								id="mensajeContra"></span><input type="password" name="password" id="password"
+								class="form-control contra" placeholder="Puede incluir caracteres especiales" maxlength="200" required
+								th:field="*{password}" onblur="comprobarPassword()">
+						</div>
+						<div class="form-label-group col-11 mx-auto mb-3">
+							<label for="contrasenaRep">Repetir contraseña <span>*</span></label> <input type="password"
+								name="passwordRep" id="passwordRep" minlength="8" class="form-control contra" placeholder="Repita la contraseña"
+								maxlength="200" required onblur="comprobarPassword()">
+						</div>
+						<!-- Sólo visible para el admin -->
+						<div sec:authorize="hasRole('ROLE_ADMIN')" class="form-label-group col-11 mx-auto mb-3">
+							<label for="admin">Role <span>*</span></label><br /> <input type="radio" name="admin"
+								value="true" /> <label>Admin</label><br />
+							<input type="radio" name="admin" checked="" value="false" /> <label>Cliente</label>
+						</div>
+						<div class="col-12 col-xl-10 col-lg-10 text-center" sec:authorize="!isAuthenticated()">
+							<div class="g-recaptcha" data-sitekey="6LeTo6MUAAAAAIeC7vsbOcvjSC7wpL1uK-HAQW0s"></div>
+						</div>
+						<!-- No logueado -->
+						<div class="col-3 mx-auto my-4" sec:authorize="!isAuthenticated()">
+							<input type="submit" id='validate' name="alta" value="Darme de alta" />
+						</div>
+						<!-- Admin -->
+						<div class="col-3 col-xl-2 mx-auto my-5" sec:authorize="hasRole('ROLE_ADMIN')">
+							<input type="submit" name="nuevo" value="Enviar" />
+						</div>
+					</form>
+					<!-- Esta opción solo será visible para quienes decir que no estén autentificados-->
+					<div class="text-center mb-5" sec:authorize="!isAuthenticated()">
+						<a class="h5" th:href="@{/login}">¿Ya está registrado? Inicie
+							sesión</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div sec:authorize="hasRole('ROLE_ADMIN')" th:insert="fragments/footer.html :: pie"></div>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+		integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+		crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+		integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" th:src="@{/js/formularios.js}"></script>
+</body>
+
+</html>

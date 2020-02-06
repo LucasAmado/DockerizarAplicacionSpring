@@ -1,0 +1,11 @@
+com.salesianostriana.dam.proyectocontraoferta
+com.salesianostriana.dam.proyectocontraoferta.configuration
+com.salesianostriana.dam.proyectocontraoferta.controller
+com.salesianostriana.dam.proyectocontraoferta.excepciones
+com.salesianostriana.dam.proyectocontraoferta.formbean
+com.salesianostriana.dam.proyectocontraoferta.model
+com.salesianostriana.dam.proyectocontraoferta.repo
+com.salesianostriana.dam.proyectocontraoferta.security
+com.salesianostriana.dam.proyectocontraoferta.services
+com.salesianostriana.dam.proyectocontraoferta.services.base
+com.salesianostriana.dam.proyectocontraoferta.storage
